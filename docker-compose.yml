@@ -1,0 +1,13 @@
+version: '2'
+services:
+  mockstep:
+    image: python:3.6
+    environment:
+      - FLASK_DEBUG=1
+      - SERVER_PORT=9090
+    ports:
+      - "9090:8080"
+    volumes:
+      - ./pyroku:/usr/src/
+
+    command: bash -c "cd /usr/src/ && pip install -r requirements.txt && python server.py"
