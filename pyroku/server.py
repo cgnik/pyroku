@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def root():
-    return send_from_directory('static', 'index.html')
+    return send_from_directory('public', 'index.html')
 
 
 if __name__ == '__main__':
