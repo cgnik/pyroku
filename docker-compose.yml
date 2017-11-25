@@ -11,4 +11,4 @@ services:
       - ./requirements.txt:/requirements.txt
       - ./pyroku:/usr/src/
       - ./build:/usr/src/static/
-    command: bash -c "cd /usr/src/ && pip install -r requirements.txt && python server.py"
+    command: bash -c "cd /usr/src/ && pip install -r /requirements.txt && python server.py"
