@@ -4,7 +4,7 @@ services:
     image: nginx
     volumes:
       - ./nginx/nginx-template.conf:/nginx-template.conf
-      - ./build:/usr/share/nginx/html
+      - ./public:/usr/share/nginx/html
       - ./cert:/etc/ssl/certs/
     environment:
       - PROTECTED_HOST=services

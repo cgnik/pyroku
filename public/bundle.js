@@ -3409,7 +3409,7 @@ function getComponentName(fiber) {
 /**
  * ReactElementValidator provides a wrapper around a element factory
  * which validates the props passed to the element. This is intended to be
- * used only in DEV and could be replaced by a public type checker for languages
+ * used only in DEV and could be replaced by a static type checker for languages
  * that support it.
  */
 
@@ -3528,7 +3528,7 @@ function validateExplicitKey(element, parentType) {
 }
 
 /**
- * Ensure that every element either is passed in a public location, in an
+ * Ensure that every element either is passed in a static location, in an
  * array with an explicit keys property defined, or in an object literal
  * with valid key property.
  *
@@ -3590,7 +3590,7 @@ function validatePropTypes(element) {
     currentlyValidatingElement = null;
   }
   if (typeof componentClass.getDefaultProps === 'function') {
-    warning(componentClass.getDefaultProps.isReactClassApproved, 'getDefaultProps is only used on classic React.createClass ' + 'definitions. Use a public property named `defaultProps` instead.');
+    warning(componentClass.getDefaultProps.isReactClassApproved, 'getDefaultProps is only used on classic React.createClass ' + 'definitions. Use a static property named `defaultProps` instead.');
   }
 }
 
@@ -9712,7 +9712,7 @@ function FiberNode(tag, key, internalContextTag) {
 // please ensure we do the following:
 // 1) Nobody should add any instance methods on this. Instance methods can be
 //    more difficult to predict when they get optimized and they are almost
-//    never inlined properly in public compilers.
+//    never inlined properly in static compilers.
 // 2) Nobody should rely on `instanceof Fiber` for type testing. We should
 //    always know when it is a fiber.
 // 3) We might want to experiment with using numeric keys since they are easier
@@ -10362,11 +10362,11 @@ var ReactFiberClassComponent = function (scheduleWork, computeExpirationForFiber
       var noGetInitialStateOnES6 = !instance.getInitialState || instance.getInitialState.isReactClassApproved || instance.state;
       warning(noGetInitialStateOnES6, 'getInitialState was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Did you mean to define a state property instead?', name);
       var noGetDefaultPropsOnES6 = !instance.getDefaultProps || instance.getDefaultProps.isReactClassApproved;
-      warning(noGetDefaultPropsOnES6, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a public property to define defaultProps instead.', name);
+      warning(noGetDefaultPropsOnES6, 'getDefaultProps was defined on %s, a plain JavaScript class. ' + 'This is only supported for classes created using React.createClass. ' + 'Use a static property to define defaultProps instead.', name);
       var noInstancePropTypes = !instance.propTypes;
-      warning(noInstancePropTypes, 'propTypes was defined as an instance property on %s. Use a public ' + 'property to define propTypes instead.', name);
+      warning(noInstancePropTypes, 'propTypes was defined as an instance property on %s. Use a static ' + 'property to define propTypes instead.', name);
       var noInstanceContextTypes = !instance.contextTypes;
-      warning(noInstanceContextTypes, 'contextTypes was defined as an instance property on %s. Use a public ' + 'property to define contextTypes instead.', name);
+      warning(noInstanceContextTypes, 'contextTypes was defined as an instance property on %s. Use a static ' + 'property to define contextTypes instead.', name);
       var noComponentShouldUpdate = typeof instance.componentShouldUpdate !== 'function';
       warning(noComponentShouldUpdate, '%s has a method called ' + 'componentShouldUpdate(). Did you mean shouldComponentUpdate()? ' + 'The name is phrased as a question because the function is ' + 'expected to return a value.', name);
       if (type.prototype && type.prototype.isPureReactComponent && typeof instance.shouldComponentUpdate !== 'undefined') {
@@ -10381,7 +10381,7 @@ var ReactFiberClassComponent = function (scheduleWork, computeExpirationForFiber
       var hasMutatedProps = instance.props !== workInProgress.pendingProps;
       warning(instance.props === undefined || !hasMutatedProps, '%s(...): When calling super() in `%s`, make sure to pass ' + "up the same props that your component's constructor was passed.", name, name);
       var noInstanceDefaultProps = !instance.defaultProps;
-      warning(noInstanceDefaultProps, 'Setting defaultProps as an instance property on %s is not supported and will be ignored.' + ' Instead, define defaultProps as a public property on %s.', name, name);
+      warning(noInstanceDefaultProps, 'Setting defaultProps as an instance property on %s is not supported and will be ignored.' + ' Instead, define defaultProps as a static property on %s.', name, name);
     }
 
     var state = instance.state;
@@ -20122,7 +20122,7 @@ var ApiBase = function () {
       _classCallCheck(this, ApiBase);
 
       var p = props || {};
-      this.baseUrl = p['baseUrl'] || "http://localhost:8080/";
+      this.baseUrl = p['baseUrl'] || "/";
       this.endPoints = p['endPoints'] || {};
    }
 
@@ -20137,7 +20137,9 @@ var ApiBase = function () {
       }
    }, {
       key: 'fetch',
-      value: function fetch(url, method) {}
+      value: function fetch(url, method) {
+         console.log(url);
+      }
    }]);
 
    return ApiBase;
