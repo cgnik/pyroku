@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Romote",
+  "name": "Romote react remote for roku devices",
   "icons": [
     {
       "src": "favicon.ico",

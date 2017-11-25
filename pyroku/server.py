@@ -1,12 +1,13 @@
-from flask import Flask, send_from_directory
+from flask import Flask, Response
 from os import environ
+from json import dumps as json_dumps
 
 app = Flask(__name__)
 
 
 @app.route('/')
 def root():
-    return send_from_directory('public', 'index.html')
+    return Response(json_dumps({"test": "value"}), mimetype='application/json')
 
 
 if __name__ == '__main__':
