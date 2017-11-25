@@ -1,7 +1,7 @@
 class ApiBase {
    constructor(props) {
       const p = props || {};
-      this.baseUrl = p['baseUrl'] || "http://localhost:8060/";
+      this.baseUrl = p['baseUrl'] || "/";
       this.endPoints = p['endPoints'] || {};
    }
 
@@ -14,7 +14,7 @@ class ApiBase {
    }
 
    fetch(url, method) {
-
+      console.log(url);
    }
 }
 

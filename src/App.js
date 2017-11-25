@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import logo from './logo.png';
 import './App.css';
 import Roku from './services.js';
 import {Row, Button} from 'react-materialize';
@@ -20,7 +19,7 @@ export default class App extends Component {
       return (
          <div className="App">
             <header className="App-header">
-               <img src={logo} className="App-logo" alt="logo"/>
+               {/*<img src={logo} className="App-logo" alt="logo"/>*/}
             </header>
             <div className="App-intro">
                <Row>

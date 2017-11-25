@@ -1,14 +1,25 @@
 version: '2'
 services:
-  mockstep:
+  main:
+    image: nginx
+    volumes:
+      - ./nginx/nginx-template.conf:/nginx-template.conf
+      - ./build:/usr/share/nginx/html
+      - ./cert:/etc/ssl/certs/
+    environment:
+      - PROTECTED_HOST=services
+      - PROTECTED_HOST_PORT=8080
+    ports:
+      - 8443:443
+    links:
+      - services
+    command: /bin/bash -c "envsubst < /nginx-template.conf > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"
+  services:
     image: python:3.6
     environment:
       - FLASK_DEBUG=1
-      - SERVER_PORT=9090
-    ports:
-      - "9090:8080"
+      - SERVER_PORT=8080
     volumes:
       - ./requirements.txt:/requirements.txt
       - ./pyroku:/usr/src/
-      - ./build:/usr/src/static/
-    command: bash -c "cd /usr/src/ && pip install -r /requirements.txt && python server.py"
+    command: bash -c "pip install -r /requirements.txt && cd /usr/src/ && python server.py"

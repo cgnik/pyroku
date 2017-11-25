@@ -2,7 +2,7 @@ module.exports = {
     "context": __dirname,
     "entry": "./src/index.js",
     "output": {
-        "path": __dirname + "/public/",
+        "path": __dirname + "/build",
         "filename": "bundle.js"
     },
     module: {
@@ -16,7 +16,7 @@ module.exports = {
                 }
             },
             {
-                test: /.scss$/,
+                test: /css$/,
                 exclude: /node_modules/,
                 loaders: ["style-loader", "css-loader", "sass-loader"]
             }
