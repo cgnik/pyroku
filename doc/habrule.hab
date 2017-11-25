@@ -1,0 +1,44 @@
+#!/usr/bin/python
+
+# Roku REST API (see https://sdkdocs.roku.com/display/sdkdocs/External+Control+Guide#ExternalControlGuide-3.7DIAL(DiscoveryandLaunch):
+#  - query/apps: Returns a map of all channels installed on the Roku box along with their app id (needed for other commands)
+#  - keydown/<key> : send a key down command. Supported keys include: Home, Rev, Fwd, Play, Select, Left, Right, Down, Up,
+#    Back, InstantReplay, Info, Backspace, Search, Enter, (Roku TVs: VolumeDown, VolumeMute, VolumeUp)
+#  - keyup/<key> : send the key up command
+#  - keypress/<key> : the same as a keydown/<key> followed by a keyup/<key>
+#  - launch/<app id> : launch the given channel
+#  - install/<app id> : closes the current channel and opens the channel store to the passed in app's page
+#  - query/device-info : get system info, useful to match up serial numbers to IP address
+#  - query/icon/<app id> : returns the png icon of the passed in app
+#  - input : allows custom input to apps hat support it
+#
+# NOTE: there is no way to determine what channel is currently running
+#
+
+rule "Get Roku Addresses"
+when
+        Time cron "0 0 0/1 ? # #" or
+        Item RefreshRokuAddresses received command
+then
+    logInfo("Roku", "Refreshing Roku Addresses")
+    var String results = executeCommandLine("chmod a+x /etc/openhab/configurations/scripts/searchRokus.py", 5000)
+    logInfo("Roku", "chmod results: " + results)
+    results = executeCommandLine("/etc/openhab/configurations/scripts/searchRokus.py", 20000)
+    logInfo("Roku", "searchRoku.py results:\n" + results)
+    val rokuAddrs = results.split("\n")
+    rokuAddrs.forEach[addr |
+        val s = addr.split(" ")
+        switch (s.get(0)) {
+                case "5S464G054996" : LivingRoomRokuAddress.postUpdate(s.get(1))
+                default : logInfo("Roku", s.get(0) + " is an unknown Roku")
+        }
+    ]
+end
+
+rule "Go Home on Home Roku after bed"
+when
+        Time cron "0 0 2 ? * *" // 2 am
+then
+        logInfo("Roku", "Sending Living Room Roku to Home")
+        sendHttpGetRequest(LivingRoomRokuAddress+"keypress/Home")
+end
